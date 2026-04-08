@@ -1,6 +1,6 @@
 let currentPage = 1;
 let clicks = 0;
-const maxClicks = 5;
+const maxClicks = 10;
 let fireworksInterval;
 
 // ── Music ──────────────────────────────────────────
@@ -32,10 +32,40 @@ document.addEventListener('click', function startOnce() {
   document.removeEventListener('click', startOnce);
 }, { once: true });
 
-// ── Navigation ─────────────────────────────────────
+// ── Countdown ──────────────────────────────────────
+const BIRTHDAY = new Date('2026-04-12T00:00:00');
+
+function updateCountdown() {
+  const now = new Date();
+  const diff = BIRTHDAY - now;
+
+  const days    = Math.floor(diff / (1000 * 60 * 60 * 24));
+  const hours   = Math.floor((diff / (1000 * 60 * 60)) % 24);
+  const minutes = Math.floor((diff / (1000 * 60)) % 60);
+  const seconds = Math.floor((diff / 1000) % 60);
+
+  document.getElementById('cdDays').textContent    = String(days).padStart(2, '0');
+  document.getElementById('cdHours').textContent   = String(hours).padStart(2, '0');
+  document.getElementById('cdMinutes').textContent = String(minutes).padStart(2, '0');
+  document.getElementById('cdSeconds').textContent = String(seconds).padStart(2, '0');
+}
+
+function showMainSite() {
+  // Reset semua dot & page dulu
+  document.querySelectorAll('.dot').forEach(d => d.classList.remove('active'));
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+
+  document.getElementById('page1').classList.add('active');
+  document.getElementById('dot1').classList.add('active');
+  currentPage = 1;
+  makeConfetti();
+}
+
 function goTo(n) {
-  document.getElementById('page' + currentPage).classList.remove('active');
-  document.getElementById('dot' + currentPage).classList.remove('active');
+  // Hapus active dari semua page & dot
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.dot').forEach(d => d.classList.remove('active'));
+
   currentPage = n;
   document.getElementById('page' + n).classList.add('active');
   document.getElementById('dot' + n).classList.add('active');
@@ -71,8 +101,14 @@ function makeConfetti() {
 function makeCats() {
   const row = document.getElementById('catsRow');
   row.innerHTML = '';
+
+  // Hitung umur otomatis
+  const birthYear = 2000;
+  const age = BIRTHDAY.getFullYear() - birthYear;
+  document.getElementById('ageNum').textContent = age;
+
   const catEmojis = ['🐱','😺','😸','😹','😻','🙀','😿','😾'];
-  for (let i = 0; i < 26; i++) {
+  for (let i = 0; i < age; i++) {
     const span = document.createElement('span');
     span.className = 'cat-small';
     span.textContent = catEmojis[i % catEmojis.length];
@@ -89,23 +125,33 @@ function startRunBtn() {
   const msg = document.getElementById('caughtMsg');
   btn.style.display = 'block';
   msg.style.display = 'none';
-  placeBtn();
+
+  // Tunggu area render dulu sebelum place
+  requestAnimationFrame(() => placeBtn());
 }
 
 function placeBtn() {
   const btn = document.getElementById('runBtn');
   const area = document.getElementById('btnArea');
+  if (!area || !btn) return;
   const maxX = area.offsetWidth - btn.offsetWidth - 10;
   const maxY = area.offsetHeight - btn.offsetHeight - 10;
   btn.style.left = Math.max(0, Math.random() * maxX) + 'px';
   btn.style.top = Math.max(0, Math.random() * maxY) + 'px';
 }
 
-document.getElementById('runBtn').addEventListener('mouseover', function () {
+// Desktop: kabur saat mouse bergerak di atasnya
+document.getElementById('runBtn').addEventListener('mousemove', function () {
+  placeBtn();
+});
+
+// Mobile: kabur saat disentuh, butuh 10x sentuh
+document.getElementById('runBtn').addEventListener('touchstart', function (e) {
+  e.preventDefault();
   clicks++;
   if (clicks >= maxClicks) { caughtIt(); return; }
   placeBtn();
-});
+}, { passive: false });
 
 function caughtIt() {
   const btn = document.getElementById('runBtn');
@@ -169,4 +215,5 @@ function startFireworks() {
 }
 
 // ── Init ───────────────────────────────────────────
+showMainSite();
 makeConfetti();

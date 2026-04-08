@@ -19,8 +19,25 @@
 
 <div class="confetti-container" id="confettiContainer"></div>
 
+<!-- Page Countdown: shown if not yet April 12 -->
+<div class="page active" id="pageCountdown">
+  <span class="cat-big">🐱</span>
+  <p class="subtitle" style="margin-bottom:8px;">Sabar yaa...</p>
+  <h1 class="title" style="font-size:clamp(24px,6vw,48px);">Tunggu sabar,<br>belum waktunya! 🙈</h1>
+  <div class="countdown-box">
+    <div class="countdown-item"><span id="cdDays">00</span><label>Hari</label></div>
+    <div class="countdown-sep">:</div>
+    <div class="countdown-item"><span id="cdHours">00</span><label>Jam</label></div>
+    <div class="countdown-sep">:</div>
+    <div class="countdown-item"><span id="cdMinutes">00</span><label>Menit</label></div>
+    <div class="countdown-sep">:</div>
+    <div class="countdown-item"><span id="cdSeconds">00</span><label>Detik</label></div>
+  </div>
+  <p style="color:#aaa;font-size:14px;font-weight:700;margin-top:16px;">menuju 12 April 2026 🎂</p>
+</div>
+
 <!-- Page 1: Intro -->
-<div class="page active" id="page1">
+<div class="page" id="page1">
   <span class="cat-big">🐱</span>
   <div class="badge">12 April 2026</div>
   <h1 class="title">Happy Birthday<br>Ayang Uti!</h1>
@@ -30,7 +47,7 @@
 
 <!-- Page 2: Age reveal -->
 <div class="page" id="page2">
-  <p style="font-size:18px;color:#888;font-weight:700;margin-bottom:8px;">Tudey ayang nambah tua jadi...</p>
+  <p style="font-size:18px;color:#888;font-weight:700;margin-bottom:8px;">Hari ini kamu resmi berusia...</p>
   <div class="age-display" id="ageNum">26</div>
   <p class="age-label">tahun! 🎂</p>
   <div class="cats-row" id="catsRow"></div>
@@ -82,8 +99,9 @@
 </div>
 
 <!-- Dots -->
-<div class="dots">
-  <div class="dot active" id="dot1"></div>
+<div class="dots" id="dotsNav">
+  <div class="dot active" id="dotCountdown"></div>
+  <div class="dot" id="dot1"></div>
   <div class="dot" id="dot2"></div>
   <div class="dot" id="dot3"></div>
   <div class="dot" id="dot4"></div>
